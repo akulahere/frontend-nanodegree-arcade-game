@@ -3,10 +3,17 @@ const playerStartY = 400;
 const stepX = 100;
 const stepY = 85;
 
+const enemyStartX = 0;
+const enemyMinSpeed = 100;
+const enemyMaxSpeed = 300;
+const enemyStartYArray = [60, 145, 230]
+
+
 // Enemies our player must avoid
-var Enemy = function (x,y) {
-    this.x = x;
+var Enemy = function (y) {
+    this.x = enemyStartX;
     this.y = y;
+    this.speed = getRandomInteger(enemyMinSpeed, enemyMaxSpeed);
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
@@ -19,15 +26,17 @@ var Enemy = function (x,y) {
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function (dt) {
+    this.x += this.speed * dt;
+    if (this.x > 600) {
+        this.x = enemyStartX;
+    }
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
 };
 
 // Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function (x,y) {
-    this.x = x;
-    this.y = y;
+Enemy.prototype.render = function () {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
@@ -42,6 +51,15 @@ let Player = function (x,y) {
 }
 
 Player.prototype.update = function () {
+    console.log('upd')
+    allEnemies.forEach(enemy => {
+        // if (this.x === enemy.x) {
+        if ((makeRound10(this.x) === makeRound10(enemy.x)) && (this.y === enemy.y)) {
+            alert(enemy.x);
+            this.x = playerStartX;
+            this.y = playerStartY;
+        };
+    })
 };
 
 Player.prototype.handleInput = function (key) {
@@ -56,18 +74,27 @@ Player.prototype.handleInput = function (key) {
     }
 };
 
-Player.prototype.render = function() {
+Player.prototype.render = function () {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-let enemy1 = new Enemy(200,200);
-const allEnemies = [enemy1];
+let enemy1 = new Enemy(230, 900);
+let enemy2 = new Enemy(145, 900);
+let enemy3 = new Enemy(60, 900);
+const allEnemies = [enemy1, enemy2,enemy3];
 let player = new Player(playerStartX, playerStartY);
 
 
+function getRandomInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function makeRound10(val) {
+    return Math.round(val / 100) * 100;
+}
 
 
 
