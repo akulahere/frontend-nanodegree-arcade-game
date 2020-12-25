@@ -1,5 +1,12 @@
+const playerStartX = 200;
+const playerStartY = 400;
+const stepX = 100;
+const stepY = 85;
+
 // Enemies our player must avoid
-var Enemy = function() {
+var Enemy = function (x,y) {
+    this.x = x;
+    this.y = y;
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
@@ -11,14 +18,14 @@ var Enemy = function() {
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
-Enemy.prototype.update = function(dt) {
+Enemy.prototype.update = function (dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
 };
 
 // Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function(x,y) {
+Enemy.prototype.render = function (x,y) {
     this.x = x;
     this.y = y;
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
@@ -27,28 +34,41 @@ Enemy.prototype.render = function(x,y) {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
+
 let Player = function (x,y) {
     this.x = x;
     this.y = y;
     this.sprite = 'images/char-boy.png';
 }
-Player.prototype.update = function() {
-};
-Player.prototype.handleInput = function(key) {
 
-}
+Player.prototype.update = function () {
+};
+
+Player.prototype.handleInput = function (key) {
+    if (key === 'left' && this.x - stepX >= 0) {
+        this.x -= stepX;
+    } else if (key === 'right' && this.x + stepX <= 500 - stepX) {
+        this.x += stepX;
+    } else if (key === 'down' && this.y + stepY <= playerStartY) {
+        this.y += stepY;
+    } else if (key === 'up' && this.y > 0) {
+        this.y -= stepY;
+    }
+};
 
 Player.prototype.render = function() {
-
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-let enemy1 = new Enemy();
+let enemy1 = new Enemy(200,200);
 const allEnemies = [enemy1];
-let player = new Player(400, 400);
+let player = new Player(playerStartX, playerStartY);
+
+
+
 
 
 // This listens for key presses and sends the keys to your
@@ -60,6 +80,7 @@ document.addEventListener('keyup', function(e) {
         39: 'right',
         40: 'down'
     };
-
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+
