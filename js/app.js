@@ -8,6 +8,7 @@ var Enemy = function() {
     this.sprite = 'images/enemy-bug.png';
 };
 
+
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
@@ -17,19 +18,37 @@ Enemy.prototype.update = function(dt) {
 };
 
 // Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
+Enemy.prototype.render = function(x,y) {
+    this.x = x;
+    this.y = y;
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
+let Player = function (x,y) {
+    this.x = x;
+    this.y = y;
+    this.sprite = 'images/char-boy.png';
+}
+Player.prototype.update = function() {
+};
+Player.prototype.handleInput = function(key) {
 
+}
+
+Player.prototype.render = function() {
+
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-
+let enemy1 = new Enemy();
+const allEnemies = [enemy1];
+let player = new Player(400, 400);
 
 
 // This listens for key presses and sends the keys to your
