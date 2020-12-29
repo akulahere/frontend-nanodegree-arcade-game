@@ -44,13 +44,11 @@ let Player = function (x,y, enemies) {
 }
 
 Player.prototype.update = function () {
-    allEnemies.forEach(enemy => {
-        if (this.isCollision(enemy)) {
-            alert('You lose');
-            this.x = playerStartX;
-            this.y = playerStartY;
-        };
-    })
+    if (this.isCollision()) {
+        alert('You lose');
+        this.x = playerStartX;
+        this.y = playerStartY;
+    }
     if (this.y < finishLineY) {
         setTimeout(() => {
             this.y = playerStartY;
@@ -59,10 +57,12 @@ Player.prototype.update = function () {
     }
 };
 
-Player.prototype.isCollision = function (enemy) {
-    if ((makeRound100(this.x) === makeRound100(enemy.x)) && (this.y === enemy.y)) {
-        return true;
-    }
+Player.prototype.isCollision = function () {
+    this.enemies.forEach(enemy => {
+        if ((makeRound100(this.x) === makeRound100(enemy.x)) && (this.y === enemy.y)) {
+            return true;
+        }
+    })
     return false;
 }
 
