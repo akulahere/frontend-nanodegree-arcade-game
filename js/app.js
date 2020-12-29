@@ -36,7 +36,8 @@ Enemy.prototype.render = function () {
 };
 
 
-let Player = function (x,y) {
+let Player = function (x,y, enemies) {
+    this.enemies = enemies;
     this.x = x;
     this.y = y;
     this.sprite = 'images/char-boy.png';
@@ -44,7 +45,7 @@ let Player = function (x,y) {
 
 Player.prototype.update = function () {
     allEnemies.forEach(enemy => {
-        if ((makeRound100(this.x) === makeRound100(enemy.x)) && (this.y === enemy.y)) {
+        if (this.isCollision(enemy)) {
             alert('You lose');
             this.x = playerStartX;
             this.y = playerStartY;
@@ -57,6 +58,13 @@ Player.prototype.update = function () {
         }, 10);
     }
 };
+
+Player.prototype.isCollision = function (enemy) {
+    if ((makeRound100(this.x) === makeRound100(enemy.x)) && (this.y === enemy.y)) {
+        return true;
+    }
+    return false;
+}
 
 Player.prototype.handleInput = function (key) {
     if (key === 'left' && this.x - stepX >= 0) {
@@ -79,7 +87,7 @@ for (let i = 0; i < 3; i++) {
     allEnemies.push(new Enemy(enemyStartYPositions[i]));
 }
 
-let player = new Player(playerStartX, playerStartY);
+let player = new Player(playerStartX, playerStartY, allEnemies);
 
 
 document.addEventListener('keyup', function(e) {
@@ -91,5 +99,3 @@ document.addEventListener('keyup', function(e) {
     };
     player.handleInput(allowedKeys[e.keyCode]);
 });
-
-
